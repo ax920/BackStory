@@ -1,14 +1,14 @@
 import "./Gallery.css";
 
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 
 import AddCard from "../upload/AddCard";
 import EditModal from "../upload/EditModal";
 import Modal from "@mui/material/Modal";
-import PolaroidImage from '../PolaroidImage/PolaroidImage'
+import PolaroidImage from "../PolaroidImage/PolaroidImage";
 import Upload from "../upload/Upload";
-import { fetchPhotoIds } from '../../slices/photos.js'
+import { fetchPhotoIds } from "../../slices/photos.js";
 
 function Gallery() {
   const [flippedIndex, setFlippedIndex] = useState(null);
@@ -16,6 +16,11 @@ function Gallery() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editSRC, setEditSRC] = useState("");
   const dispatch = useDispatch();
+
+  const URL =
+    process.env.NODE_ENV === "production"
+      ? "https://backstory-backend.onrender.com"
+      : "http://localhost:8000";
 
   useEffect(() => {
     dispatch(fetchPhotoIds("toad"));
@@ -27,9 +32,9 @@ function Gallery() {
     setFlippedIndex(flippedIndex !== index ? index : null);
   };
   const handleDelete = (id) => {
-    fetch(`/${id}`, { method: 'DELETE' })
-    .then(() => dispatch(fetchPhotoIds('toad')))
-    .catch(console.error)
+    fetch(`/${id}`, { method: "DELETE" })
+      .then(() => dispatch(fetchPhotoIds("toad")))
+      .catch(console.error);
   };
   const handleEdit = (imageURL) => {
     setEditSRC(imageURL);
@@ -62,7 +67,7 @@ function Gallery() {
               key={index}
               isFlipped={flippedIndex === index}
               onFlip={() => handleFlip(index)}
-              imageURL={`http://localhost:8000/image/${photo.photoId}`}
+              imageURL={`${URL}/image/${photo.photoId}`}
               caption={photo.caption}
               deletePhoto={handleDelete}
               editPhoto={handleEdit}
@@ -72,7 +77,10 @@ function Gallery() {
       </div>
       <Modal open={uploadModalOpen} onClose={handleSetUploadModalClose}>
         <div className="modal">
-          <Upload imageSrc={"https://cdn.wallpapersafari.com/50/4/wa7o0g.png"} closeModal={handleSetUploadModalClose} />
+          <Upload
+            imageSrc={"https://cdn.wallpapersafari.com/50/4/wa7o0g.png"}
+            closeModal={handleSetUploadModalClose}
+          />
         </div>
       </Modal>
       <Modal open={editModalOpen} onClose={handleSetEditModalClose}>
@@ -83,6 +91,5 @@ function Gallery() {
     </>
   );
 }
-
 
 export default Gallery;
