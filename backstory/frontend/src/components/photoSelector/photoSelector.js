@@ -11,6 +11,11 @@ function PhotoSelector({ photos, collection, onSave }) {
     setFlippedIndex(flippedIndex !== index ? index : null);
   };
 
+    const BACKEND_URL =
+    process.env.NODE_ENV === 'production'
+      ? 'https://backstory-backend.onrender.com'
+      : 'http://localhost:8000';
+
   useEffect(() => {
     setSelectedPhotos(new Set(collection));
   }, [collection]);
@@ -40,7 +45,7 @@ function PhotoSelector({ photos, collection, onSave }) {
               id={photo._id}
               isFlipped={flippedIndex === index}
               onFlip={() => handleFlip(index)}
-              imageURL={`/photos/${photo.photoId}/image`}
+              imageURL={`${BACKEND_URL}/photos/${photo.photoId}/image`}
               caption={photo.caption}
             />
             <input
