@@ -7,8 +7,13 @@ function New({ closeModal }) {
   const [title, setTitle] = useState("");
   const { user } = useAuth0()
 
+    const BACKEND_URL =
+    process.env.NODE_ENV === 'production'
+      ? 'https://backstory-backend.onrender.com'
+      : 'http://localhost:8000';
+
   function handleButtonClick() {
-    fetch(`/users/${user.email}/collections`, {
+    fetch(`${BACKEND_URL}/users/${user.email}/collections`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
